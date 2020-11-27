@@ -7,10 +7,9 @@
 {% block content %}
   <div class="container">
     <div class="row sprint-detail">
-      {% csrf_token %}
       <div class="col-10 sprint-info">
         <span class="icon-used">
-          {% if sprint_name.used %}
+          {% if object.used %}
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-slash-circle not-available" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
               <path fill-rule="evenodd" d="M11.354 4.646a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -26,7 +25,7 @@
       </div>
       <div class="col text-right">
         <div><a class="delete-sprint-name" data-id="{{object.id}}" href="#">Delete sprint-name</a></div>
-        <div><a href="">Use sprint-name</a></div>
+        <div><a class="use-sprint-name" data-id="{{object.id}}" href="#">Use sprint-name</a></div>
       </div>
     </div>
   </div>
@@ -38,5 +37,5 @@
 {% endblock %}
 
 {% block app %}
-  <script src="{% static "js/names_detail.js" %}"></script>
+  <script src="{% static "js/names-detail.js" %}"></script>
 {% endblock %}

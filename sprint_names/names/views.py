@@ -1,6 +1,7 @@
 import json
 
-from django.http import JsonResponse
+from datetime import datetime
+from django.http import HttpResponseForbidden, JsonResponse
 from django.views.generic import DetailView, ListView
 
 from names.models import Names
@@ -39,10 +40,7 @@ def create_sprintname(request):
             status=200
         )
     else:
-        return JsonResponse(
-            {'error': 'method not allowed'},
-            status=405
-        )
+        return HttpResponseForbidden()
 
 
 def delete_sprintname(request, sprint_id):
@@ -53,8 +51,26 @@ def delete_sprintname(request, sprint_id):
             {"id": sprint_id, "message": "deleted"},
             status=200
         )
-    else:
-        return JsonResponse(
-            {'error': 'method not allowed'},
-            status=405
+    elif request.method == 'PUT':  # use sprint-name
+        Names.objects.filter(pk=sprint_id).update(
+            used=True, used_at=datetime.now()
         )
+
+        return JsonResponse(
+            {"id": sprint_id, "message": "used"},
+            status=200
+        )
+    else:
+        return HttpResponseForbidden()
+
+
+def search_sprintname(request, query):
+    if request.method == 'GET':
+        results = Names.objects.filter(name__icontains=query).values()
+
+        return JsonResponse(
+            {'results': list(results)},
+            status=200
+        )
+    else:
+        return HttpResponseForbidden()

@@ -47,6 +47,10 @@ function onSaveNewSprintname(event) {
     };
 
     return fetch('/api/name/', options).then((response) => response.json())
+      .then((data) => {
+        $('#new-sprintname-modal').modal('toggle');
+        location.href = '/';
+      })
       .catch((error) => {
         console.error('Error: ', error);
       });
@@ -77,3 +81,77 @@ function onDeleteSprintname(event) {
       console.error('Error: ', error);
     });
 }
+
+function onUseSprintname(event) {
+  const el = event.currentTarget;
+  const id = el.getAttribute('data-id');
+  const input = document.querySelector('nav input');
+  const csrfToken = input.value;
+
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrfToken
+    }
+  };
+
+  return fetch(`/api/name/${id}`, options).then((response) => response.json())
+    .catch((error) => {
+      console.error('Error: ', error);
+    });
+}
+
+function onSearchSprintname(event) {
+  event.preventDefault();
+
+  const el = event.currentTarget;
+  const query = el.querySelector('input').value;
+  const input = document.querySelector('nav input');
+  const csrfToken = input.value;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrfToken
+    }
+  };
+
+  return fetch(`/api/names/search/${query}`, options).then((response) => response.json())
+    .then((data) => {
+      const content = document.querySelector('.content');
+      const names = data.results.map((item) => {
+        return `
+          <tr>
+            <td><a href="/names/${item.id}#">${item.name}</a></td>
+            <td>${item.author}</td>
+          </tr>
+        `;
+      });
+      content.innerHTML = `
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Sprint Name</th>
+              <th scope="col">Author</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${names.join('')}
+          </tbody>
+        </table>
+      `;
+    })
+    .catch((error) => {
+      console.error('Error: ', error);
+    });
+}
+
+// global events
+function onLoad() {
+  createSelectorEvent('.save-new-sprintname', 'click', onSaveNewSprintname);
+  createSelectorEvent('.filter-sprintnames', 'submit', onSearchSprintname);
+}
+
+window.addEventListener('load', onLoad, {once: true});

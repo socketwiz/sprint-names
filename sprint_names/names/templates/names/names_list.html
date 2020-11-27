@@ -30,9 +30,9 @@
               </svg>
             {% endif %}
           </td>
-          <td><a href="{% url 'name-detail' sprint_name.pk %}">{{sprint_name.name}}</a></td>
+          <td><a href="{% url 'name-detail' sprint_name.pk %}#">{{sprint_name.name}}</a></td>
           <td>{{sprint_name.author}}</td>
-          <td><span class="icon icon-trash" data-id="{{sprint_name.id}}" title="Delete sprint-name"></span></td>
+          <td><span class="icon icon-trash" data-id="{{sprint_name.id}}#" title="Delete sprint-name"></span></td>
         </tr>
       {% endfor %}
     </tbody>
@@ -72,6 +72,6 @@
 {% endblock %}
 
 {% block app %}
-  <script src="{% static "js/names_list.js" %}"></script>
+  <script src="{% static "js/names-list.js" %}"></script>
 {% endblock %}
 
