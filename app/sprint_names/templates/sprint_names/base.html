@@ -1,0 +1,147 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Sprint Names{% endblock %}</title>
+    <meta name="description"
+      content="Convert intersting topics that come up during the day into sprint-names">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="manifest" href="{% static "site.webmanifest" %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+
+    <link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+
+    {% block custom_css %}{% endblock %}
+  </head>
+
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.
+      </p>
+    <![endif]-->
+
+    <header id="pageHeader">
+      {% block header %}{% endblock %}
+    </header>
+
+    <main role="main" class="container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+        {% csrf_token %}
+        <a class="navbar-brand" href="/">Sprint Names</a>
+        <button aria-controls="navbars-commands"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          class="navbar-toggler"
+          data-target="#navbars-commands"
+          data-toggle="collapse"
+          type="button">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbars-commands">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link new-sprintname"
+                data-target="#new-sprintname-modal"
+                data-toggle="modal"
+                href="#">New sprint name</a>
+            </li>
+          </ul>
+          <form class="filter-sprintnames form-inline my-2 my-md-0">
+            <input aria-label="Search"
+              class="form-control"
+              name="query"
+              placeholder="Search"
+              required
+              type="text">
+          </form>
+        </div>
+      </nav>
+
+      <div class="content">
+        {% block content %}{% endblock %}        
+      </div>
+    </main>
+
+    <footer id="pageFooter">
+
+    </footer>
+
+    <div aria-hidden="true"
+      aria-labelledby="new-sprintname-title"
+      class="modal fade"
+      id="new-sprintname-modal"
+      role="dialog"
+      tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="new-sprintname-title">New sprint name</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="new-sprintname-form needs-validation">
+              <div class="form-group">
+                <label for="sprint-name">Sprint name</label>
+                <input type="text" class="form-control" name="name" required>
+                <div class="invalid-feedback">
+                  Please enter a sprint-name
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Author</label>
+                <input aria-describedby="authorHelp"
+                  class="form-control"
+                  name="author"
+                  required
+                  type="text">
+                <small id="authorHelp" class="form-text text-muted">
+                  Tell us who you are so we know who created the sprint-name
+                </small>
+                <div class="invalid-feedback">
+                  Please tell us who you are
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sprintname-description">Description</label>
+                <textarea class="form-control" name="description" required rows="3"></textarea>
+              </div>
+              <small class="form-text text-muted">
+                Please give us all the juicy details on how this name came about
+              </small>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary save-new-sprintname">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% block app %}{% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"></script>
+    <script src="{% static "js/main.js" %}"></script>
+  </body>
+
+</html>
