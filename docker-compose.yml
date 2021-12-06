@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   web:
@@ -7,17 +7,27 @@ services:
     volumes:
       - static_volume:/srv/www/sprint-names/static/
       - ./data:/code/sprint_names/data
-    ports:
-      - 8000:8000
+    networks:
+      - proxy
   nginx:
     image: nginx:1.19.0-alpine
     volumes:
       - static_volume:/srv/www/sprint-names/static/
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    ports:
-      - 80:80
     depends_on:
       - web
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sprintnames.rule=Host(`sprintnames.thesystemisdown.lol`)"
+      - "traefik.http.routers.sprintnames.entrypoints=websecure"
+      - "traefik.http.routers.sprintnames.tls=true"
+      - "traefik.http.routers.sprintnames.tls.certresolver=myresolver"
+      - "traefik.http.routers.sprintnames.service=sprintnames-service"
+      - "traefik.http.services.sprintnames-service.loadbalancer.server.port=80"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
 volumes:
   static_volume:
